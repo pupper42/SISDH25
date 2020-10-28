@@ -1,9 +1,7 @@
 import numpy as np 
 from scipy.interpolate import PchipInterpolator as pchip
 import matplotlib.pyplot as plt
-import pandas as pd
 import os
-import glob
 
 for subdir, dirs, files in os.walk("./Data/Max"):
     for filename in files:

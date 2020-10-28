@@ -1,9 +1,7 @@
 import numpy as np 
 from scipy.interpolate import PchipInterpolator as pchip
 import math
-import matplotlib.pyplot as plt
 import os
-import glob
 
 data_dir = "./TempTime/"
 
