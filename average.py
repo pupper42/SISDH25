@@ -22,7 +22,7 @@ for files in os.listdir(data_dir):
         minArr = []
         for i in np.arange(0, math.floor(x/730), 1):        
             minArr.append(temperature[i*730 + d, 3])
-        print(minArr)
+        
         minArr = np.array(minArr)
         av_min.append(minArr[minArr != -99].mean())
 
@@ -30,37 +30,41 @@ for files in os.listdir(data_dir):
         maxArr = []
         for i in np.arange(0, math.floor(x/730), 1):        
             maxArr.append(temperature[i*730 + d, 3])
-        print(maxArr)
+        
         maxArr = np.array(maxArr)
         av_max.append(maxArr[maxArr != -99].mean())
 
-    av_min = np.array(av_min)
-    av_max = np.array(av_max)
+    try:
+        av_min = np.array(av_min)
+        av_max = np.array(av_max)
 
-    min_time = np.arange(0, 3600, 24)
-    max_time = np.arange(9, 3600, 24)
+        min_time = np.arange(0, 3600, 24)
+        max_time = np.arange(9, 3600, 24)
 
-    min_temp_time = np.column_stack((av_min, min_time))
-    max_temp_time = np.column_stack((av_max, max_time))
-
-
-    av_temp_time = np.concatenate((min_temp_time, max_temp_time))
+        min_temp_time = np.column_stack((av_min, min_time))
+        max_temp_time = np.column_stack((av_max, max_time))
 
 
-    av_temp_time_inorder = av_temp_time[av_temp_time[:, 1].argsort()]
+        av_temp_time = np.concatenate((min_temp_time, max_temp_time))
 
 
-    x_axis = av_temp_time_inorder[:, 1]
-    y_axis = av_temp_time_inorder[:, 0]
+        av_temp_time_inorder = av_temp_time[av_temp_time[:, 1].argsort()]
 
-    print(y_axis)
-    inter = pchip(x_axis, y_axis)
 
-    x_new = np.arange(0, 3600, 1)
-    y_new = inter(x_new)
+        x_axis = av_temp_time_inorder[:, 1]
+        y_axis = av_temp_time_inorder[:, 0]
 
-    av_temp_interpolated = np.column_stack((x_new, y_new))
-    np.savetxt(save_dir, av_temp_interpolated, delimiter = ",")
+        
+        inter = pchip(x_axis, y_axis)
+
+        x_new = np.arange(0, 3600, 0.5)
+        y_new = inter(x_new)
+
+        av_temp_interpolated = np.column_stack((x_new, y_new))
+        np.savetxt(save_dir, av_temp_interpolated, delimiter = ",")
+    except Exception as e:
+        print(e)
+        pass
 
 
 

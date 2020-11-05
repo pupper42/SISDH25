@@ -3,7 +3,16 @@ from scipy.interpolate import PchipInterpolator as pchip
 import matplotlib.pyplot as plt
 import os
 
-for subdir, dirs, files in os.walk("./Data/Max"):
+#You can change data directories here
+
+maxData = "./Data/Max/" #Location of maximum temperature data
+minData = "./Data/Min/" #Location of minimum temperature data
+
+maxTime = "./MaxTime/" #Where to output max temp + time
+minTime = "./MinTime/" #Where to output min temp + time
+
+
+for subdir, dirs, files in os.walk(maxData):
     for filename in files:
         max_temp = subdir + os.sep + filename
         if max_temp.endswith(".csv"):
@@ -12,10 +21,10 @@ for subdir, dirs, files in os.walk("./Data/Max"):
             maxrows, maxcols = max_array.shape
             max_time = np.arange(9, maxrows * 24, 24)
             max_temp_time = np.column_stack((max_array, max_time))
-            savedir = "./MaxTime/" + filename
+            savedir = maxTime + filename
             np.savetxt(savedir, max_temp_time, delimiter = ",")
 
-for subdir, dirs, files in os.walk("./Data/Min"):
+for subdir, dirs, files in os.walk(minData):
     for filename in files:
         min_temp = subdir + os.sep + filename
         if min_temp.endswith(".csv"):
@@ -23,7 +32,7 @@ for subdir, dirs, files in os.walk("./Data/Min"):
             minrows, mincols = min_array.shape
             min_time = np.arange(0, minrows * 24, 24)
             min_temp_time = np.column_stack((min_array, min_time))
-            savedir = "./MinTime/" + filename
+            savedir = minTime + filename
             np.savetxt(savedir, min_temp_time, delimiter = ",")
 
 for file in os.listdir("./MinTime/"):
